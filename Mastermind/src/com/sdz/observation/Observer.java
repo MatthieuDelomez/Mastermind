@@ -1,6 +1,6 @@
 package com.sdz.observation;
 
-import com.sdz.admin.Score;
+import com.sdz.model.Score;
 
 public interface Observer {
 	
