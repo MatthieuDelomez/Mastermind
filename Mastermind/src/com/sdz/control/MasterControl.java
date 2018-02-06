@@ -9,8 +9,6 @@ package com.sdz.control;
  * Pattern MVC - Classe permettant de controler et transférer
  * les données saisies par l'utilisateur associés au jeu Mastermind.
  * 
- * @author Matthieu Delomez
- * 
  *************************************************************************/
 
 

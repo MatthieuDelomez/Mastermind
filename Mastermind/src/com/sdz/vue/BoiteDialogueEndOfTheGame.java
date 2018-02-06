@@ -19,8 +19,6 @@ import javax.swing.JRadioButton;
  * Classe qui s'inscrit donc dans la partie VUE du pattern MVC, boite de 
  * dialogue qui permet au joueur de relancer la partie ou retourner sur 
  * la page d'accueil.
- *
- * @author Matthieu Delomez
  * 
  *************************************************************************/
 
