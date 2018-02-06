@@ -278,7 +278,7 @@ public class DonneeMaster implements Observable {
 				
 				for(int i = 0; i< this.nbCase; i++) {
 					
-					for(int j = 0, j < this.nbCase; j++) {
+					for(int j = 0; j < this.nbCase; j++) {
 						
 						if(premierElementListe.charAt(i) == tabAnalyse[j] && tabComparaison[i] != 1) {
 							tabComparaison[i] = 2;
@@ -286,33 +286,34 @@ public class DonneeMaster implements Observable {
 							break;
 						}
 					}
+				}
 					
 					Arrays.sort(tabComparaison);
 					for(int i = 0; i < this.nbCase; i++) {
 						
 						if(tabComparaison[i] == 1)
-							resultatComparaison += "R";
+							resultComparaison += "R";
 						
 						else if(tabComparaison[i]==2)
-							resultatComparaison+="B";
+							resultComparaison+="B";
 						
 						else
-							resultatComparaison+="V";
+							resultComparaison+="V";
 					
 					}
 					
-					if(!resultatComparaison.equals(reponseManDefenseur)) {
+					if(!resultComparaison.equals(reponseManDefenseur)) {
 						itParcoursListe.remove();
 					}
 				}
 				
 				LOGGER.debug("Jeu Mastermind en mode Défenseur - Taille liste chainée réactualisée :"
 						
-						+ listePossibilitees.size();
+						+ listePossibilitees.size());
 						
 				LOGGER.debug("Jeu Mastermind en mode Défenseur - Premier elements réactualisé  :"
 						
-						+ listePossibilitees.getFirst();
+						+ listePossibilitees.getFirst());
 						
 				reponseManDefenseur = "";
 				proposiCpuDefenseur = listePossibilitees.getFirst();
@@ -348,7 +349,7 @@ public class DonneeMaster implements Observable {
 		 * 
 		 * @param proposiSecrete Combinaison secrète du joueur en mode duel.
 		 */
-		public void setPropositionSecreteJoueurModeDuel(String propositionSecrete) {
+		public void setPropositionSecreteManDuel(String propositionSecrete) {
 			this.proposiSecreteManDuel=propositionSecrete;
 			
 			LOGGER.debug("Jeu Mastermind en mode Duel - Proposition Secrète Joueur Modèle de données :"
@@ -368,7 +369,7 @@ public class DonneeMaster implements Observable {
 		 * Suite à la proposition du joueur, l'ordinateur devra répondre et également
 		 * faire une proposition.
 		 * 
-		 * @param proposioueur Proposition du joueur en mode duel.
+		 * @param proposiMan Proposition du joueur en mode duel.
 		 */
 		public void setProposiManDuel(String proposiJoueur) {
 			int verifReponseCpuDuel = 0;
@@ -389,7 +390,7 @@ public class DonneeMaster implements Observable {
 			
 			for(int i = 0; i < this.nbCase; i++) {
 				if(reponseCpuDuel.charAt(i)== 'R') {
-					verifReponseCpu++;
+					verifReponseCpuDuel++;
 				}
 			}
 
@@ -410,13 +411,15 @@ public class DonneeMaster implements Observable {
 			this.reponseManDuel = reponseJoueur;
 		}
 		
+		
 		/**
 		 * Méthode relative au mode Duel qui permet d'analyser la proposition du joueur en la comparant
 		 * à la combinaison secrète de l'ordinateur.
 		 */
+		private void analyseProposiManDuel() {
+			
 		
-		//Analyse des boules bien placées (pions rouges) et mal placées (pions blancs). Pour faciliter le traitement, on va dire 
-		//que pions rouges équivaut à 1, pions blancs à 2 et emplacement vide à 3.
+		//Analyse des boules bien placées (pions rouges) et mal placées (pions blancs).
 		
 				int[] tabReponse = new int[this.nbCase];
 				char []tabAnalyse = new char[this.nbCase];
@@ -427,17 +430,19 @@ public class DonneeMaster implements Observable {
 					tabReponse[i]=3;
 				}
 				
+				
 				reponseCpuDuel = "";
 		
+				
 				for (int i=0;i<this.nbCase;i++) {
 					
-				}
+				
 					if(this.proposiManDuel.charAt(i)==tabAnalyse[i]) {
 						tabReponse[i]=1;
 						tabAnalyse[i]=' ';
 					}
 	}
-	
+
 	for (int i=0;i<this.nbCase;i++) {
 		
 		for(int j=0;j<this.nbCase;j++) {
@@ -503,7 +508,7 @@ public void proposiCpuDuel() {
 		
 		while(itParcoursListe.hasNext()) {
 			
-		}
+		
 			String strElementListe=itParcoursListe.next();
 			String resultatComparaison="";
 			
@@ -612,7 +617,7 @@ public void setChoixFinPartie(String choixFinPartie) {
 		this.quitterAppli();
 	
 	else if(this.choixFinPartie.equals("Lancer un autre jeu"))
-		this.acceuilObserver();
+		this.accueilObserver();
 	
 	else {
 		this.relancerPartie();
@@ -700,7 +705,7 @@ public void quitterAppli() {
 	}
 }
 
-public void acceuilObserver() {
+public void accueilObserver() {
 	for (Observer obs : listeObservateur) {
 		obs.accueilObserver();
 	}
@@ -714,7 +719,12 @@ public void relancerPartie() {
 		this.proposiCpuDuel="";
 		obs.relancerPartie();
 	}
-}}
-		
+}
+  }
+
+
+
+
+
 
 

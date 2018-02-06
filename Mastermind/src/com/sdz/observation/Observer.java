@@ -1,6 +1,5 @@
 package com.sdz.observation;
 
-import com.sdz.model.Score;
 
 
 /*************************MASTERMIND******************************/

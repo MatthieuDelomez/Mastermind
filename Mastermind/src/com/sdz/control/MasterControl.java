@@ -1,5 +1,8 @@
 package com.sdz.control;
 
+import com.sdz.model.*;
+import com.sdz.vue.*;
+import com.sdz.control.*;
 
 
 /******************************MASTERMIND********************************/
@@ -12,7 +15,7 @@ package com.sdz.control;
  *************************************************************************/
 
 
-public class MasterControler {
+public class MasterControl {
 	
 
 	/**

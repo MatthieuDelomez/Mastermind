@@ -1,6 +1,5 @@
 package com.sdz.observation;
 
-import com.sdz.model.Score;
 
 
 /*************************MASTERMIND******************************/
@@ -30,7 +29,7 @@ public interface Observable {
 	/**
 	 * Méthode qui permet de réinitialiser la liste des bservateurs.
 	 */
-	public void deleteObserver();
+	public void delObserver();
 	
 	/**
 	 * Méthode qui permet de quitter l'appli.

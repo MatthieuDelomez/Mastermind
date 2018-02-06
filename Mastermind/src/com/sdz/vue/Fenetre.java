@@ -37,7 +37,7 @@ import com.sdz.observation.Observer;
  * aux fonctionnalités du jeux. Elle implémente l'interface Observer.
  * 
  * @ author Matthieu Delomez
- * @see Observateur
+ * @see Observer
  * 
  *******************************************************************/
 
