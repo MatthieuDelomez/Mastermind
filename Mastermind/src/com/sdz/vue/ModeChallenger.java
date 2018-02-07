@@ -211,7 +211,7 @@ public class ModeChallenger extends JPanel implements Observer {
 	/**
 	 * Variable de type boolean qui permet d'indiquer la fin de partie.
 	 */
-	private boolean finDePartie = false;
+	private boolean finPartie = false;
 	
 	/**
 	 * Variable qui permet la gestion des logs d'erreurs.
@@ -236,7 +236,7 @@ public class ModeChallenger extends JPanel implements Observer {
 	 * @param modelMaster Modèle de données correspondant au jeu Mastermind.
 	 * @see DonneesMastermind 
 	 */
-	public ModeChallenger(int nbCase, int nbEssai, int nbCouleur, boolean modeDeveloppeurActive, DonneesMaster modelMaster) {
+	public ModeChallenger(int nbCase, int nbEssai, int nbCouleur, boolean modeDeveloppeurActive, DonneeMaster modelMaster) {
 		
 		LOGGER.trace("Instanciation du jeu en mode Challenger");
 		this.setPreferredSize(new Dimension(1000,740));
@@ -368,7 +368,7 @@ public class ModeChallenger extends JPanel implements Observer {
 		}
 		else {
 			
-		}
+		
 			this.affichageSolution();
 		}
 
@@ -467,7 +467,7 @@ public class ModeChallenger extends JPanel implements Observer {
 					public void actionPerformed(ActionEvent arg0) {
 						
 						controlerMaster.setProposiManChallenger(proposiManChallenger);
-						if(!finDePartie) {
+						if(!finPartie) {
 							proposiManChallenger= "";
 							ligne++;
 							colonne=1;
@@ -475,7 +475,7 @@ public class ModeChallenger extends JPanel implements Observer {
 						}
 						
 						else
-							finDePartie=false;
+							finPartie=false;
 					}	
 				});
 
@@ -672,8 +672,8 @@ public class ModeChallenger extends JPanel implements Observer {
  		
  		LOGGER.debug("Jeu Mastermind en mode Challenger - Génération de la combinaison secrète:"+combiSecreteCpu);
  		controlerMaster.setModeJeu(0);
- 		controlerMaster.setNbrEssais(this.nbEssai);
- 		controlerMaster.setNbreCases(this.nbCase);
+ 		controlerMaster.setNbEssai(this.nbEssai);
+ 		controlerMaster.setNbCase(this.nbCase);
  		controlerMaster.setProposiSecreteCpuChallenger(combiSecreteCpu);
  	}
 
@@ -741,7 +741,7 @@ public class ModeChallenger extends JPanel implements Observer {
  		
  		containerGrilleJeu.revalidate();
  		containerGrilleJeu.repaint();
- 		this.gestionFinDePartie(reponse);
+ 		this.gestionFinPartie(reponse);
  	}
 
  	
@@ -785,7 +785,7 @@ public class ModeChallenger extends JPanel implements Observer {
  	 * Gestion de la fin de la partie en fonction de la réponse de l'ordinateur.
  	 * @param reponse Réponse de l'ordinateur.
  	 */
- 	private void gestionFinDePartie(String reponse) {
+ 	private void gestionFinPartie(String reponse) {
 
  		verifCombiSecrete = 0;
  		
@@ -798,7 +798,7 @@ public class ModeChallenger extends JPanel implements Observer {
  		//En cas de victoire
  		if(verifCombiSecrete == nbCase) {
  			
- 			JOptionPane.showMessageDialog(null, "Félicitations!!! Vous avez trouvé la combinaison secrète en moins de "+nbEssais+" essais.", 
+ 			JOptionPane.showMessageDialog(null, "Félicitations!!! Vous avez trouvé la combinaison secrète en moins de "+nbEssai+" essais.", 
  					"Fin de Partie",JOptionPane.INFORMATION_MESSAGE);
  			this.affichageSolution();
  		}
@@ -815,9 +815,9 @@ public class ModeChallenger extends JPanel implements Observer {
  		if(ligne == nbEssai-1||verifCombiSecrete == nbCase) {
  			
  			LOGGER.trace("Jeu Mastermind en mode Challenger - Fin de partie");
- 			finDePartie = true;
- 			finDePartie = new BoiteDialogueEndOfTheGame(null,"Fin de Partie",true);
- 			controlerMaster.setChoixFinPartie(finDePartie.getChoixFinPartie());
+ 			finPartie = true;
+ 			jdFinPartie = new BoiteDialogueEndOfTheGame(null,"Fin de Partie",true);
+ 			controlerMaster.setChoixFinPartie(jdFinPartie.getChoixFinPartie());
  		}
 
  	}

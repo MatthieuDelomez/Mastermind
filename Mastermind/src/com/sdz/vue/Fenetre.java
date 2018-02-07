@@ -2,6 +2,8 @@ package com.sdz.vue;
 
 import java.awt.BorderLayout;
 
+
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -27,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.sdz.model.*;
 import com.sdz.control.*;
+import com.sdz.vue.*;
 import com.sdz.observation.Observable;
 import com.sdz.observation.Observer;
 
@@ -68,7 +71,7 @@ public class Fenetre extends JFrame implements Observer {
 	private JMenuItem apropos2 = null;
 	private JMenuItem regle  =null;
 	
-	private JMenuItem modeChallenger = new JMenuItem("Mode Challenger"),
+	private JMenuItem modeChallengerItem = new JMenuItem("Mode Challenger"),
 			
 			modeDefenseur = new JMenuItem("Mode Défenseur"),
 			
@@ -102,11 +105,11 @@ public class Fenetre extends JFrame implements Observer {
 	 * @see MasterDefenseur
 	 * @see MasterDuel
 	 */
-	private MasterChallenger masterChallenger;
+	private ModeChallenger modeChallenger;
 	
-	private MasterDefenseur masterDefenseur;
+//	private MasterDefenseur masterDefenseur;
 	
-	private MasterDuel masterDuel;
+//	private MasterDuel masterDuel;
 	
 	
 	/**
@@ -197,16 +200,28 @@ public class Fenetre extends JFrame implements Observer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		finally {
+			
 			if(input!=null) {
+				
 				try {
+					
 					input.close();
+					
+					
 				} catch (IOException e) {
 					e.printStackTrace();
+					
+					
 				}	
 			}
 		}
-	
+		
+		this.initMenu();
+		this.setVisible(true);
+	}
+		
 		
 		/**
 		 * Méthode qui permet d'initialiser le menu de la fenêtre principale.	 
@@ -249,7 +264,7 @@ public class Fenetre extends JFrame implements Observer {
 			
 			
 			// Définition  des listeners.
-			modeChallenger.addActionListener(new ActionListener() {
+			modeChallengerItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					container.removeAll();
 					container.setBackground(Color.WHITE);
@@ -287,9 +302,9 @@ public class Fenetre extends JFrame implements Observer {
 			
 			parametre.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					parametre = new BoiteDialogueParametrage(null,"Parmètre des Jeux",
+					parametrage = new BoiteDialogueParametrage(null,"Parmètre des Jeux",true,
 							
-						nbEssai, nbCase, nbCouleur, modeDeveloppeurActive);
+						nbEssai, nbCase, nbCouleur);
 					
 					nbEssai = parametrage.getNbrEssai();
 					nbCase = parametrage.getNbrCase();
@@ -379,7 +394,7 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	* Pattern Observer - Méthode non utilisée dans la clase Fenetre.
     */
-	   public void relancerPartie() {}
+	    public void relancerPartie() {}}
 
 
 

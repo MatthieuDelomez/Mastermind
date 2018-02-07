@@ -573,8 +573,8 @@ public void proposiCpuDuel() {
  * 
  * @param modeJeu Variable relative au mode de jeu : 0 - Challenger, 1 - Défenseur, 2 - Duel.
  */
-  public void setModeDeJeu(int modeDeJeu) {
-	this.modeJeu = modeDeJeu;
+  public void setModeJeu(int modeJeu) {
+	this.modeJeu = modeJeu;
 }
 
 /**
