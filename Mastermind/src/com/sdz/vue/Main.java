@@ -51,11 +51,10 @@ public class Main {
 			modeDeveloppeurActiveConsole = false;
 		
 		
-		// Insanciation des modèles de données relatif au jeu.
-		DonneeMaster model = new DonneeMaster();
+		Observable Obs = new DonneeMaster();
 		
 		// Instanciation de la fenetre principale.
-		new Fenetre(model, modeDeveloppeurActiveConsole);
+		  new Fenetre (Obs, modeDeveloppeurActiveConsole);
 		
 	}
 	

@@ -600,7 +600,7 @@ public void setNbCase(int nbCases) {
  * 
  * @param nbCouleur - Nombre de couleurs utilisables.
  */
-public void setNbCouleur(int nbCouleurs) {
+public void setNbCouleur(int nbCouleur) {
 	this.nbCouleur=nbCouleur;
 }
 

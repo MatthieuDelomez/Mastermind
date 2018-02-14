@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -56,20 +57,22 @@ public class Fenetre extends JFrame implements Observer {
 	 * A propos = Regles + Credit.
 	 * 
 	 */
-	private JMenuBar menu = null;
+	private JMenuBar menu;
 	
 	private JMenu fichier = null;
-	private JMenu apropos = null;
+	private JMenu apropos = new JMenu("apropos");
 	private JMenu modeJeux = null;
 	private JMenu parametre = null;
+
 
 	private JMenuItem nouveau = null;
 	private JMenuItem score = null;
 	private JMenuItem quitter = null;
-	private JMenuItem reglage = null;
+	private JMenuItem reglage = new JMenuItem("Reglage");
+    
 	
-	private JMenuItem apropos2 = null;
-	private JMenuItem regle  =null;
+	private JMenuItem apropos2 = new JMenuItem("A propos");
+	private JMenuItem regle  =new JMenuItem("Regle");
 	
 	private JMenuItem modeChallengerItem = new JMenuItem("Mode Challenger"),
 			
@@ -83,7 +86,7 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Image de la page d'accuei.
 	 */
-	private JLabel imageJeu = new JLabel(new ImageIcon("ressources/Mastermind.jpg"));
+	private JLabel imageJeu = new JLabel(new ImageIcon("ressources/Mastermind.png"));
 	
 	
 	/**
@@ -107,9 +110,9 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	private ModeChallenger modeChallenger;
 	
-//	private MasterDefenseur masterDefenseur;
+	private ModeDefenseur masterDefenseur;
 	
-//	private MasterDuel masterDuel;
+	private ModeDuel masterDuel;
 	
 	
 	/**
@@ -161,7 +164,7 @@ public class Fenetre extends JFrame implements Observer {
 	 * @see DonneeMaster
 	 */
 	
-	public Fenetre(DonneeMaster donneeMaster, boolean modeDeveloppeurActiveConsole) {
+	public Fenetre(Observable donneeMaster, boolean modeDeveloppeurActiveConsole) {
 		
 		LOGGER.trace("Instanciation de la fenetre principale");
 		this.setTitle("Mastermind");
@@ -174,10 +177,10 @@ public class Fenetre extends JFrame implements Observer {
 		
 		container.setPreferredSize(new Dimension(600,637));
 		container.add(imageJeu);
-		container.setBackground(Color.white);
+		container.setBackground(Color.black);
 		this.setContentPane(container);
 		
-		this.model = model;
+		this.model = donneeMaster;
 		this.model.addObserver(this);
 		this.modeDeveloppeurActive = modeDeveloppeurActiveConsole;
 		LOGGER.trace("Initialisation des modèles de données");
@@ -192,9 +195,9 @@ public class Fenetre extends JFrame implements Observer {
 			input = new FileInputStream("ressources/config.properties");
 			prop.load(input);
 			
-			nbEssai = Integer.valueOf(prop.getProperty("param.nbEssaisActifMastermind"));
-			nbCase = Integer.valueOf(prop.getProperty("param.nbCaseActifMastermind"));
-			nbCouleur = Integer.valueOf(prop.getProperty("param.nbCouleurActifMastermind"));
+			nbEssai = Integer.valueOf(prop.getProperty("param.nbEssaiActif"));
+			nbCase = Integer.valueOf(prop.getProperty("param.nbCaseActif"));
+			nbCouleur = Integer.valueOf(prop.getProperty("param.nbCouleurActif"));
 
 			
 		} catch (IOException e) {
@@ -234,15 +237,22 @@ public class Fenetre extends JFrame implements Observer {
 			fichier = new JMenu("fichier");
 			fichier.setMnemonic('f');
 			nouveau = new JMenuItem("nouveau");
+			quitter = new JMenuItem("Quitter");
+			parametre = new JMenu();
+			modeJeux = new JMenu();
+			score = new JMenuItem();
+			
+
+			
 
 
 			// Définition des accélérateurs
 			quitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
-			parametre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+		//	parametre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
 			
 
 			// Construction du menu
-			modeJeux.add(modeChallenger);
+			modeJeux.add(modeChallengerItem);
 			modeJeux.add(modeDefenseur);
 			modeJeux.add(modeDuel);
 			
