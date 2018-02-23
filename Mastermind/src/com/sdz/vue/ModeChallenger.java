@@ -1,6 +1,10 @@
 package com.sdz.vue;
 
 import java.awt.Color;
+
+
+
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -25,10 +29,10 @@ import com.sdz.vue.*;
 /*************************MASTERMIND******************************/
 
 /** Classe qui correspond au mode de jeu Challnger.
- *Elle implémente l'interface Observer.
+ *  Elle implémente l'interface Observer.
  * 
- * @ author Matthieu Delomez
- * @see Observer
+ *  @ author Matthieu Delomez
+ *  @see Observer
  * 
  *******************************************************************/
 
@@ -127,10 +131,10 @@ public class ModeChallenger extends JPanel implements Observer {
 	/**
 	 * Tableau de JLabel à deux dimensions.
 	 */
-	private JLabel [] [] tabJLabelGrilleJeu;
+	private JLabel [][] tabJLabelGrilleJeu;
 	
 	/**
-	 * Tableau de JLabeal à 1 dimension.
+	 * Tableau de JLabel à 1 dimension.
 	 */
 	private JLabel [] tabJLabelSolution, tabJLabelSolutionCombiSecreteCpu;
 	
@@ -172,9 +176,9 @@ public class ModeChallenger extends JPanel implements Observer {
 	/**
 	 * Typographie.
 	 */
-	private Font police = new Font("Courrier", Font.PLAIN, 14),
+	private Font police = new Font("Arial", Font.PLAIN, 14),
 			
-			policeSolution = new Font("Courrier", Font.BOLD, 14);
+			policeSolution = new Font("Arial", Font.BOLD, 14);
 	
 	
 	/**
@@ -185,7 +189,7 @@ public class ModeChallenger extends JPanel implements Observer {
 	/**
 	 * Proposition du joueur en mode challenger.
 	 */
-	private String proposiManChallenger = "";
+	private String propoManChallenger = "";
 	
 	/**
 	 * Modèle de données relatif au jeu.
@@ -234,13 +238,13 @@ public class ModeChallenger extends JPanel implements Observer {
 	 * @param nbCouleur Nombre de couleurs utilisables du jeu Mastermind.
 	 * @param modeDeveloppeurActive Paramètre de type booléen indiquant si le mode développeur est activé ou non.
 	 * @param modelMaster Modèle de données correspondant au jeu Mastermind.
-	 * @see DonneesMastermind 
+	 * @see DonneesMaster
 	 */
 	public ModeChallenger(int nbCase, int nbEssai, int nbCouleur, boolean modeDeveloppeurActive, DonneeMaster modelMaster) {
 		
 		LOGGER.trace("Instanciation du jeu en mode Challenger");
 		this.setPreferredSize(new Dimension(1000,740));
-		this.setBackground(Color.WHITE);
+		this.setBackground(Color.PINK);
 		this.nbCase = nbCase;
 		this.nbEssai = nbEssai;
 		this.nbCouleur = nbCouleur;
@@ -269,6 +273,8 @@ public class ModeChallenger extends JPanel implements Observer {
 		bCouleurMarron.setPreferredSize(new Dimension(29,29));
 		bCouleurNoir.setPreferredSize(new Dimension(29,29));
 
+		LOGGER.trace("Bouton chargé ");
+		
 		containerButonCouleur.setPreferredSize(new Dimension(1000,40));
 		containerButonCouleur.setBackground(Color.WHITE);
 	
@@ -466,9 +472,9 @@ public class ModeChallenger extends JPanel implements Observer {
 				bValider.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						
-						controlerMaster.setProposiManChallenger(proposiManChallenger);
+						controlerMaster.setPropoManChallenger(propoManChallenger);
 						if(!finPartie) {
-							proposiManChallenger= "";
+							propoManChallenger= "";
 							ligne++;
 							colonne=1;
 							bValider.setEnabled(false);
@@ -494,6 +500,9 @@ public class ModeChallenger extends JPanel implements Observer {
    	 */
      private void initialisationGrilleJeu() {
    	 	
+    	 
+ 		LOGGER.trace("Initialisation de la Grille de jeu");
+
    		gl=new GridLayout(this.nbEssai,this.nbCase+2);
    		containerGrilleJeu.setLayout(gl);
    		containerGrilleJeu.setPreferredSize(new Dimension(30*(this.nbCase+2),29*this.nbEssai));
@@ -590,8 +599,11 @@ public class ModeChallenger extends JPanel implements Observer {
      private void updateGrilleJeu(int lig, int col,ImageIcon couleurChoisie, String codeCouleur) {
  		if(colonne<=this.nbCase) {
  			
+ 	 		LOGGER.debug("Mode challenger - MAJ de la grille de jeu"); // = Log non pris en compte
+
+ 			
  			tabJLabelGrilleJeu[lig][col] = new JLabel(couleurChoisie);
- 			proposiManChallenger += codeCouleur;
+ 			propoManChallenger += codeCouleur;
  			tabJLabelGrilleJeu[lig][col].setBorder(BorderFactory.createLineBorder(Color.BLACK));
  			
  			
@@ -631,12 +643,14 @@ public class ModeChallenger extends JPanel implements Observer {
  	 */
  	private void effacerLigneGrilleJeu(int lig, int col,ImageIcon emplacementVide) {
  		
+ 		
+ 		
  		for(int i=1;i<col;i++) {
  			
  			tabJLabelGrilleJeu[lig][i]=new JLabel(emplacementVide);
  		}
  		
- 		proposiManChallenger = ""; 
+ 		propoManChallenger = ""; 
  		
  		//L'organisation en GridLayout impose un remplissage ligne par ligne
  		containerGrilleJeu.removeAll();
@@ -671,15 +685,19 @@ public class ModeChallenger extends JPanel implements Observer {
  		}
  		
  		LOGGER.debug("Jeu Mastermind en mode Challenger - Génération de la combinaison secrète:"+combiSecreteCpu);
- 		controlerMaster.setModeJeu(0);
+ 		controlerMaster.setModeJeu(2);
  		controlerMaster.setNbEssai(this.nbEssai);
  		controlerMaster.setNbCase(this.nbCase);
- 		controlerMaster.setProposiSecreteCpuChallenger(combiSecreteCpu);
+ 		controlerMaster.setPropoSecreteCpuChallenger(combiSecreteCpu);
  	}
 
- 	/* ***********************************
- 	 * Implémentation du pattern Observer	
- 	 *************************************/
+
+	/* *************************************************************************************************
+	 * 
+	 ********************************IMPLEMENTATION DU PATTERN OBSERVER*********************************
+	 * 
+	 **************************************************************************************************/
+	
 
  	/**
  	 * Pattern Observer - Méthode non utilisée dans cette classe. 
@@ -697,7 +715,7 @@ public class ModeChallenger extends JPanel implements Observer {
  	 */
  	public void updateMaster(String reponse) {
 
- 		/*Pour une ligne donnée, on met à jour le JPanel jpContainerSolution en suivant les étapes habituelles pour un JPanel :
+ 		/*Pour une ligne donnée, on met à jour le JPanel containerSolution en suivant les étapes habituelles pour un JPanel :
  		On supprime les anciens composants, on ajoute les nouveaux, on revalide et on fait appel à la méthode repaint()*/
 
  		containerSolution[ligne].removeAll();
@@ -729,6 +747,8 @@ public class ModeChallenger extends JPanel implements Observer {
  		//L'organisation en GridLayout impose un remplissage ligne par ligne
  		containerGrilleJeu.removeAll();
  		
+    	LOGGER.debug("Remplissage ligne par ligne");
+
  		for (int i=0;i<this.nbEssai;i++) {
  			
  			for (int j=0;j<this.nbCase+1;j++) {
@@ -773,7 +793,7 @@ public class ModeChallenger extends JPanel implements Observer {
  		colonne=1;
  		verifCombiSecrete = 0;
  		bValider.setEnabled(false);
- 		proposiManChallenger = "";
+ 		propoManChallenger = "";
  		combiSecreteCpu = "";
  		
  		this.generationCombiSecreteCpu();

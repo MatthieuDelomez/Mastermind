@@ -2,6 +2,7 @@ package com.sdz.vue;
 
 import java.awt.Color;
 
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -180,12 +181,12 @@ public class ModeDefenseur extends JPanel implements Observer{
 	/*
 	 * Combinaison secrète du joueur en mode défenseur.
 	 */
-	private String proposiSecreteManDefenseur = "";
+	private String propoSecreteManDefenseur = "";
 	
 	/*
 	 * Combinaison secrète du Cpu en mode défenseur.
 	 */
-	private String proposiCpuDefenseur = "";
+	private String propoCpuDefenseur = "";
 	
 	/*
 	 * Réponse du joueur en mode défenseur.
@@ -247,7 +248,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 	 */
 	public ModeDefenseur(int nbCase, int nbEssai, int nbCouleur, boolean modeDeveloppeurActive, DonneeMaster modelMaster ) {
 		
-		LOGGER.trace("Instanciation du jeu en mode Défenseur");
+		//LOGGER.trace("Instanciation du jeu en mode Défenseur");
 		this.setPreferredSize(new Dimension(100,740));
 		this.setBackground(Color.WHITE);
 		this.nbCase = nbCase;
@@ -361,7 +362,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 			
 			
 	    default : 
-	    	LOGGER.error("Jeu en mode Defenseur - Erreur lors de la mise en place de l'IHM pour les boutons liés aux couleurs");
+	    	//LOGGER.error("Jeu en mode Defenseur - Erreur lors de la mise en place de l'IHM pour les boutons liés aux couleurs");
 	    	
 		}
 		
@@ -522,7 +523,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 				controlMaster.setNbCase(nbCase);
 				controlMaster.setNbCouleur(nbCouleur);
 				controlMaster.setModeJeu(1);
-				controlMaster.setProposiSecreteManDefenseur(proposiSecreteManDefenseur);
+				controlMaster.setPropoSecreteManDefenseur(propoSecreteManDefenseur);
 
 
 			}
@@ -554,9 +555,9 @@ public class ModeDefenseur extends JPanel implements Observer{
 		validerReponseMan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				LOGGER.debug("Jeu en mode Defenseur - Reponse du Joueur : " + reponseManDefenseur);
+				//LOGGER.debug("Jeu en mode Defenseur - Reponse du Joueur : " + reponseManDefenseur);
 				calculReponseAttendue();
-				LOGGER.debug("Jeu en mode Defenseur - Reponse attendue : " + reponseManAttendue);
+			//	LOGGER.debug("Jeu en mode Defenseur - Reponse attendue : " + reponseManAttendue);
 				
 				if( !reponseManDefenseur.equals(reponseManAttendue)) {
 					
@@ -606,6 +607,9 @@ public class ModeDefenseur extends JPanel implements Observer{
 	 */
 	private void initialisationGrilleJeu() {
 		
+		
+		LOGGER.trace("Initialisation de la grille de jeu");
+
 		gl = new GridLayout(this.nbEssai, this.nbCase +2);
 		containerGrilleJeu.setLayout(gl);
 		containerGrilleJeu.setPreferredSize(new Dimension(30*(nbCase +2),
@@ -623,10 +627,10 @@ public class ModeDefenseur extends JPanel implements Observer{
 		tabSoluce = new JLabel[this.nbCase];
 		containerSoluce = new JPanel[this.nbEssai];
 		
-		
+		LOGGER.trace("Grille initialisée");
+
 		/*
 		 * La grille est un JPanel organisé en gridLayout et qui est composé d'un tableau
-		 * de JPanel organisé en GridLayout.
 		 */
 		for (int i = 0; i< this.nbEssai; i++) {
 			for (int j = 0; j < this.nbCase; j++) {
@@ -641,7 +645,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 				}
 				
 				else {
-					tab2DimenGrilleJeu[i][j] = new JLabel(imgEmplacementVide);
+					  tab2DimenGrilleJeu[i][j] = new JLabel(imgEmplacementVide);
 					
 				}
 			}
@@ -665,7 +669,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 		}
 		
 		/*
-		 * Organisation en GridLayout impse un remplissage ligne par ligne.
+		 * Organisation en GridLayout impse un remplissage ligne par ligne.  PROBLEME ?
 		 */
 		containerGrilleJeu.removeAll();
 		for (int i =0; i < this.nbEssai; i++) {
@@ -690,7 +694,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 	 */
 	private void updateCombiSecrete(int col, ImageIcon couleurChoisie, String codeCouleur) {
 		if(colonneCombiSecrete < this.nbCase) {
-			proposiSecreteManDefenseur += codeCouleur;
+			propoSecreteManDefenseur += codeCouleur;
 			tabSoluceCombiSecreteMan[col] = new JLabel(couleurChoisie);
 			tabSoluceCombiSecreteMan[col].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			containerSoluceCombiSecreteMan.removeAll();
@@ -739,7 +743,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 		containerSoluceCombiSecreteMan.revalidate();
 		containerSoluceCombiSecreteMan.repaint();
 		validerCombiSecrete.setEnabled(false);
-		proposiSecreteManDefenseur = "";
+		propoSecreteManDefenseur = "";
 		
 		}
 		
@@ -766,14 +770,14 @@ public class ModeDefenseur extends JPanel implements Observer{
 		 * 
 		 * @param proposiCpu - Proposition de l'ordi
 		 */
-		public void updateMaster(String proposiCpu) {
-			this.proposiCpuDefenseur = proposiCpu;
+		public void updateMaster(String propoCpuDefenseur) {
+			this.propoCpuDefenseur = propoCpuDefenseur;
 			/*
 			 * Nous devons convertir la proposition du Cpu en JLabel avc les img correspondantes sur le grille.
 			 */
 			containerGrilleJeu.removeAll();
 			for (int i =0; i < this.nbCase; i++) {
-				switch(proposiCpu.charAt(i)) {
+				switch(propoCpuDefenseur.charAt(i)) {
 				
 				case '0' :
 					tab2DimenGrilleJeu[ligne][i+1] = new JLabel(imgCouleurBleu);
@@ -826,7 +830,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 					break;
 					
 				default :
-					LOGGER.error("Jeu en mode Défenseur - Erreur de correspondance entre la proposition du cpu et les couleurs");
+					//LOGGER.error("Jeu en mode Défenseur - Erreur de correspondance entre la proposition du cpu et les couleurs");
 				}
 			}
 			
@@ -847,10 +851,10 @@ public class ModeDefenseur extends JPanel implements Observer{
 		 * Patter Observer - Méthode pour relancer le même jeu : Réinitialisation de l'IHM et de la grille de jeu
 		 * et la combinaison secrète en bas de page + les variables.
 		 */
-		private void relancerPartie() {
+		public void relancerPartie() {
 			
 		
-			LOGGER.trace("Jeu en mode Défenseur - Partie Relancée");
+			//LOGGER.trace("Jeu en mode Défenseur - Partie Relancée");
 			this.initialisationGrilleJeu();
 			containerSoluceCombiSecreteMan.removeAll();
 			containerSoluceCombiSecreteMan.add(Soluce);
@@ -896,8 +900,8 @@ public class ModeDefenseur extends JPanel implements Observer{
 			remplissageSoluce = 0;
 			verifCombiSecrete = 0;
 			reponseManAttendue = "";
-			proposiSecreteManDefenseur ="";
-			proposiCpuDefenseur = "";
+			propoSecreteManDefenseur ="";
+			propoCpuDefenseur = "";
 			
 		}
 		
@@ -933,7 +937,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 						
 		   // Defaite ou victoire
 		   if (ligne == nbEssai || verifCombiSecrete ==nbCase) {
-			   LOGGER.trace("Jeu en mode Defenseur - Fin de Partie");
+			//   LOGGER.trace("Jeu en mode Defenseur - Fin de Partie");
 			   booleanfinPartie = true;
 			   finPartie = new BoiteDialogueEndOfTheGame(null, "Fin de Partie", true);
 			   controlMaster.setChoixFinPartie(finPartie.getChoixFinPartie());
@@ -1037,7 +1041,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 		    int [] tabReponseAttendue = new int[this.nbCase];
 		    char[] tabAnalyse = new char[this.nbCase];
 		    
-		    tabAnalyse = this.proposiSecreteManDefenseur.toCharArray();
+		    tabAnalyse = this.propoSecreteManDefenseur.toCharArray();
 		    
 		    for (int i = 0; i < this.nbCase; i++) {
 		    	tabReponseAttendue[i] = 3;
@@ -1046,7 +1050,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 		    reponseManAttendue = "";
 		    
 		    for (int i = 0; i < this.nbCase; i++) {
-		    	if(this.proposiCpuDefenseur.charAt(i) == tabAnalyse[i])  {
+		    	if(this.propoCpuDefenseur.charAt(i) == tabAnalyse[i])  {
 		    		tabReponseAttendue[i] =1;
 		    		tabAnalyse[i] = ' ';		    		
 		    	}
@@ -1054,7 +1058,7 @@ public class ModeDefenseur extends JPanel implements Observer{
 		    
 		    for (int i =0; i <this.nbCase; i++) {
 		    	for (int j =0; j <this.nbCase; j++)
-		    		if(this.proposiCpuDefenseur.charAt(i)==tabAnalyse[j]&&tabReponseAttendue[i]!=1) {
+		    		if(this.propoCpuDefenseur.charAt(i)==tabAnalyse[j]&&tabReponseAttendue[i]!=1) {
 						tabReponseAttendue[i]=2;
 						tabAnalyse[j]=' ';
 						break;
@@ -1080,8 +1084,8 @@ public class ModeDefenseur extends JPanel implements Observer{
 				reponseManAttendue+="V";
 		}
 }
-}
 
+}
 
 
 		

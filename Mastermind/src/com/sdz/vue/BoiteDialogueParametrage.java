@@ -219,13 +219,14 @@ public class BoiteDialogueParametrage extends JDialog {
 			tab_nbrCouleur = str_nbrCouleur.split(",");
 		
 			
-			for(int i = 0; i < NbrCouleurFichierConfig; i++) {
+			
+			int i =0;
 				
 				nbrEssaiCombo.addItem(tab_nbrEssai[i]);
 				nbrCouleurCombo.addItem(tab_nbrCouleur[i]);
 				nbrCaseCombo.addItem(tab_nbrCase[i]);
 
-		}
+		
 			
 			nbrEssaiCombo.setSelectedItem(prop.getProperty("param.nbEssaiActif"));
 			nbrCaseCombo.setSelectedItem(prop.getProperty("param.nbCaseActif"));

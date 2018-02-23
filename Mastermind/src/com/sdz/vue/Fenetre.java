@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -57,28 +58,31 @@ public class Fenetre extends JFrame implements Observer {
 	 * A propos = Regles + Credit.
 	 * 
 	 */
-	private JMenuBar menu;
+	private JMenuBar jmbmenu = new JMenuBar();
 	
-	private JMenu fichier = null;
-	private JMenu apropos = new JMenu("apropos");
-	private JMenu modeJeux = null;
-	private JMenu parametre = null;
-
-
-	private JMenuItem nouveau = null;
-	private JMenuItem score = null;
-	private JMenuItem quitter = null;
-	private JMenuItem reglage = new JMenuItem("Reglage");
-    
-	
-	private JMenuItem apropos2 = new JMenuItem("A propos");
-	private JMenuItem regle  =new JMenuItem("Regle");
-	
-	private JMenuItem modeChallengerItem = new JMenuItem("Mode Challenger"),
+	/*
+	 * Element de la barre du menu
+	 */
+	private JMenu jmFichier = new JMenu("Fichier"), jmInstruction = new JMenu("Instruction"),
 			
-			modeDefenseur = new JMenuItem("Mode Défenseur"),
+			jmModeJeu = new JMenu("Mode de jeu"), jmParametre = new JMenu("Paramètres");
+	
+	/*
+	 * Champ permettant d'accéder à la fonctionnalité correspondante de l'application.
+	 */
+	private JMenuItem jmiModeChallenger = new JMenuItem("Mode Challenger"),
 			
-			modeDuel = new JMenuItem("Mode Duel");
+			  effacer = new JMenuItem("Nouveau"),
+
+              jmiModeDefenseur = new JMenuItem("Mode Défenseur"),
+	
+              jmiModeDuel = new JMenuItem("Mode Duel"),
+	
+              jmiQuitter = new JMenuItem("Quitter"),
+	
+              jmiRegle = new JMenuItem("Régles"),
+	
+              jmiParametre = new JMenuItem("Parametrages");
 	
 	
 	private Dimension size;
@@ -110,16 +114,16 @@ public class Fenetre extends JFrame implements Observer {
 	 */
 	private ModeChallenger modeChallenger;
 	
-	private ModeDefenseur masterDefenseur;
+	private ModeDefenseur modeDefenseur;
 	
-	private ModeDuel masterDuel;
+	private ModeDuel modeDuel;
 	
 	
 	/**
 	 * Boite de dialoge permettant de changer les paramètres du jeu.
 	 * @see BoiteDialogueParametrage
 	 */
-	private BoiteDialogueParametrage parametrage;
+	private BoiteDialogueParametrage jdparametrage;
 	
 	/**
 	 * Flux d'entrée qui va permettre de lire le fichier ressources/config.properties
@@ -140,7 +144,7 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Paramètre du jeu.
 	 */
-	private int nbCase = 4, nbEssai = 10, nbCouleur = 6;
+	private int nbCase = 4, nbEssai = 10, nbCouleur = 10;
 	
 	/**
 	 * Paramètre du mode développement
@@ -159,6 +163,7 @@ public class Fenetre extends JFrame implements Observer {
 	
 	/**
 	 * Constructeur de la classe Fenetre.
+	 * 
 	 * @param donneeMaster
 	 * @param modeDeveloppeurActiveConsole, paramètre boolean indiquant si le mode developpeur est actif ou non.
 	 * @see DonneeMaster
@@ -172,7 +177,7 @@ public class Fenetre extends JFrame implements Observer {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		this.setIconImage(new ImageIcon("ressoures/MastermindFormatIcon.png").getImage());
+		this.setIconImage(new ImageIcon("ressoures/Mastermind.png").getImage());
 		imageJeu.setPreferredSize(new Dimension(1000,740));
 		
 		container.setPreferredSize(new Dimension(600,637));
@@ -233,93 +238,127 @@ public class Fenetre extends JFrame implements Observer {
 			
 			LOGGER.trace("Initalisation du menu");
 			
-			menu = new JMenuBar(); 
-			fichier = new JMenu("fichier");
-			fichier.setMnemonic('f');
-			nouveau = new JMenuItem("nouveau");
-			quitter = new JMenuItem("Quitter");
-			parametre = new JMenu();
-			modeJeux = new JMenu();
-			score = new JMenuItem();
+			// Définition des mnémosiques
+			jmFichier.setMnemonic('F');
+			jmInstruction.setMnemonic('I');
+			jmParametre.setMnemonic('P');
 			
 
 			
-
-
 			// Définition des accélérateurs
-			quitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
-		//	parametre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+			jmiQuitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
+		    jmiParametre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
 			
+		    
+		    // Construction du menu
+		  
+			jmModeJeu.add(jmiModeChallenger);
 
-			// Construction du menu
-			modeJeux.add(modeChallengerItem);
-			modeJeux.add(modeDefenseur);
-			modeJeux.add(modeDuel);
+			jmModeJeu.add(jmiModeDefenseur);
+
+			jmModeJeu.add(jmiModeDuel);
+
+			jmFichier.add(effacer);
+
+			jmFichier.addSeparator();
+
+			jmFichier.add(jmiQuitter);
+
+			jmParametre.add(jmiParametre);
+
+			jmInstruction.add(jmiRegle);
+
+			jmbmenu.add(jmFichier);
+
+			jmbmenu.add(jmParametre);
+
+			jmbmenu.add(jmInstruction);
 			
-			fichier.add(nouveau);
-			fichier.add(score);
-			fichier.addSeparator();
-			fichier.add(quitter);
-			parametre.add(reglage);
-			
-			apropos.add(regle);		
-			apropos.add(apropos2);			
+			jmbmenu.add(jmModeJeu);
 
-			menu.add(fichier);
-			menu.add(parametre);
-			menu.add(modeJeux);
-			menu.add(apropos);
-
-			this.setJMenuBar(menu);
+			this.setJMenuBar(jmbmenu);
+		    
 			
 			
 			// Définition  des listeners.
-			modeChallengerItem.addActionListener(new ActionListener() {
+			jmiModeChallenger.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					container.removeAll();
+			    	container.setBackground(Color.PINK);
+					modeChallenger=new ModeChallenger(nbCase,nbEssai,
+
+							nbCouleur,modeDeveloppeurActive, new DonneeMaster());
+					container.revalidate();
+					container.repaint();
+					jmParametre.setEnabled(false);
+			    	LOGGER.trace("On clik sur le bouton challenger");
+
+					
+					 initModel();
+				}
+			});
+			
+			jmiModeDefenseur.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					container.removeAll();
 					container.setBackground(Color.WHITE);
+					modeDefenseur=new ModeDefenseur(nbCase,nbEssai,nbCouleur,modeDeveloppeurActive,new DonneeMaster());
 					container.revalidate();
 					container.repaint();
-					parametre.setEnabled(false);
+					jmParametre.setEnabled(false);
 					
 					initModel();
 				}
 			});
 			
-			modeDefenseur.addActionListener(new ActionListener() {
+			
+			
+			 
+		
+			 effacer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
+                     InputEvent.CTRL_MASK));
+                  effacer.addActionListener(new ActionListener(){
+                      public void actionPerformed(ActionEvent arg0){
+                                      container.removeAll();
+                              		imageJeu.setPreferredSize(new Dimension(1000,740));
+                              	//	container.setPreferredSize(new Dimension(600,637));
+                            		container.add(imageJeu);
+                					jmParametre.setEnabled(true);
+
+                            		container.setBackground(Color.black);
+                                                container.revalidate();
+                                                          initModel();
+                                                          
+                      }	    	
+                  });
+
+			
+			jmiModeDuel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					container.removeAll();
 					container.setBackground(Color.WHITE);
+					modeDuel = new ModeDuel(nbCase,nbEssai,
+
+							nbCouleur,modeDeveloppeurActive,new DonneeMaster());
 					container.revalidate();
 					container.repaint();
-					parametre.setEnabled(false);
+					jmParametre.setEnabled(false);
 					
 					initModel();
 				}
 			});
 			
-			modeDuel.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					container.removeAll();
-					container.setBackground(Color.WHITE);
-					container.revalidate();
-					container.repaint();
-					parametre.setEnabled(false);
-					
-					initModel();
-				}
-			});
 			
-			parametre.addActionListener(new ActionListener() {
+			jmiParametre.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					parametrage = new BoiteDialogueParametrage(null,"Parmètre des Jeux",true,
+					jdparametrage = new BoiteDialogueParametrage(null,"Parmètre des Jeux",true,
 							
 						nbEssai, nbCase, nbCouleur);
 					
-					nbEssai = parametrage.getNbrEssai();
-					nbCase = parametrage.getNbrCase();
-					nbCouleur = parametrage.getNbrCouleur();
-					modeDeveloppeurActive = parametrage.getModeDeveloppeurActive();
+					nbEssai = jdparametrage.getNbrEssai();
+					nbCase = jdparametrage.getNbrCase();
+					nbCouleur = jdparametrage.getNbrCouleur();
+					modeDeveloppeurActive = jdparametrage.getModeDeveloppeurActive();
 					
 					LOGGER.debug("Menu Paramètre - Nb essais :" + nbEssai);
 					LOGGER.debug("Menu Paramètre - Nb cases :" + nbCase);
@@ -330,11 +369,11 @@ public class Fenetre extends JFrame implements Observer {
 			});
 			
 			
-			regle.addActionListener(new ActionListener() {
+			jmiRegle.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String instructionJeu = 
 							
-							"Le but de ce jeu est de découvrir la combinaison à x couleurs de l'adversaire (le défenseur)."
+							"Le but de ce jeu est de découvrir la combinaison à 10 couleurs de l'adversaire (le défenseur)."
 									+ "\nPour ce faire, l'attaquant fait une proposition. Le défenseur indique pour chaque proposition"
 									+ "\nle nombre de couleurs de la proposition qui apparaissent à la bonne place (à l'aide de pions rouges)"
 									+ "\net à la mauvaise place (à l'aide de pions blancs) dans la combinaison secrète.Un mode duel où "
@@ -343,8 +382,10 @@ public class Fenetre extends JFrame implements Observer {
 				
 				}
 			});
+			
+			
 		
-			quitter.addActionListener(new ActionListener() {
+			jmiQuitter.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					LOGGER.trace("Fin de l'appli");
 					System.exit(0);
@@ -360,6 +401,15 @@ public class Fenetre extends JFrame implements Observer {
 		 * 
 		 **************************************************************************************************/
 		
+		 /**
+		* Méthode qui permet de réinitialiser les modèles de données relatifs aux jeux..
+		*/
+		    private void initModel() {
+		    	this.model = new DonneeMaster();
+		    	this.model.addObserver(this);
+		    	LOGGER.trace("Réinitialiser des modèles de données");
+		    }
+		
 	/**
 	 * Pattern Observer - Méthode non utilisée dans la clase Fenetre.
 	 */
@@ -374,23 +424,14 @@ public class Fenetre extends JFrame implements Observer {
 		System.exit(0);
 	}
 	    
-		
-    /**
-	* Méthode qui permet de réinitialiser les modèles de données relatifs aux jeux..
-	*/
-	    private void initModel() {
-	    	this.model = new DonneeMaster();
-	    	this.model.addObserver(this);
-	    	LOGGER.trace("Réinitialiser des modèles de données");
-	    }
 	    
 		
 	/**
     * Pattern Observer - Méthode pour revenir à la page d'accueil.
 	*/
 	    public void accueilObserver() {
-	    	parametre.setEnabled(true);
-	    	parametre.removeAll();
+	    	jmParametre.setEnabled(true);
+	    	jmParametre.removeAll();
 	    	container.setBackground(Color.WHITE);
 	    	container.add(imageJeu);
 	    	container.revalidate();
@@ -404,7 +445,10 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	* Pattern Observer - Méthode non utilisée dans la clase Fenetre.
     */
-	    public void relancerPartie() {}}
+	    public void relancerPartie() {}
+
+
+	}
 
 
 
