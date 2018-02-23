@@ -41,9 +41,9 @@ public class DonneeMaster implements Observable {
 	/**
 	 * Variable de type chaine de caractères au mode challenger.
 	 */
-	private String proposiSecreteCpuChallenger = "",
+	private String propoSecreteCpuChallenger = "",
 			
-			       proposiManChallenger = "",
+			       propoManChallenger = "",
 	  
 	               reponseCpuChallenger = "";
 	
@@ -58,24 +58,24 @@ public class DonneeMaster implements Observable {
 	/**
 	 * Variable de type chaine de caractères au mode défenseur.
 	 */
-	private String proposiSecreteManDefenseur = "",
+	private String propoSecreteManDefenseur = "",
 			
 			       reponseManDefenseur,
 			       
-			       proposiCpuDefenseur = "";
+			       propoCpuDefenseur = "";
 	
 	
 
 	/**
 	 * Variable de type chaine de caractères au mode duel.
 	 */
-	private String proposiSecreteCpuDuel = "",
+	private String propoSecreteCpuDuel = "",
 			
-		           proposiSecreteManDuel,
+		           propoSecreteManDuel,
 		       
-		           proposiManDuel = "",
+		           propoManDuel = "",
 		           
-		           proposiCpuDuel = "",
+		           propoCpuDuel = "",
 		           
 		           reponseManDuel = "",
 		           
@@ -113,8 +113,8 @@ public class DonneeMaster implements Observable {
 	 * 
 	 * @param proposiSecret - Combinaison secrète de l'ordi en challenger.
 	 */
-	public void setProposiSecreteCpuChallenger(String proposiSecret) {
-		this.proposiSecreteCpuChallenger = proposiSecret;
+	public void setPropoSecreteCpuChallenger(String propoSecrete) {
+		this.propoSecreteCpuChallenger = propoSecrete;
 	}
 	
 	
@@ -124,8 +124,8 @@ public class DonneeMaster implements Observable {
 	 * 
 	 * @param propositionJoueur Proposition du joueur en mode challenger.
 	 */
-	public void setProposiManChallenger(String proposiMan) {
-		this.proposiManChallenger = proposiMan;
+	public void setPropoManChallenger(String propoManChallenger) {
+		this.propoManChallenger = propoManChallenger;
 		this.analyseProposiManChallenger();
 		this.updateObserver();
 	}
@@ -143,7 +143,7 @@ public class DonneeMaster implements Observable {
 		int[] tabReponse = new int[this.nbCase];
 		char []tabAnalyse = new char[this.nbCase];
 		
-		tabAnalyse = proposiSecreteCpuChallenger.toCharArray();
+		tabAnalyse = propoSecreteCpuChallenger.toCharArray();
 		
 		for(int i = 0; i < this.nbCase; i++) {
 			tabReponse[i] = 3;
@@ -152,7 +152,7 @@ public class DonneeMaster implements Observable {
 		reponseCpuChallenger = "";
 		
 		for(int i = 0; i < this.nbCase; i++){
-			if(this.proposiManChallenger.charAt(i) == tabAnalyse[i]) {
+			if(this.propoManChallenger.charAt(i) == tabAnalyse[i]) {
 				tabReponse[i] = 1;
 				tabAnalyse[i] = ' ';
 			}
@@ -160,7 +160,7 @@ public class DonneeMaster implements Observable {
 		
 		for( int i = 0; i < this.nbCase; i++) {
 			for(int j = 0; j < this.nbCase; j++) {
-				if(this.proposiManChallenger.charAt(i) == tabAnalyse[j] && tabReponse[i] != 1) {
+				if(this.propoManChallenger.charAt(i) == tabAnalyse[j] && tabReponse[i] != 1) {
 					tabReponse[i] = 2;
 					tabAnalyse[j] = ' ';
 					break;
@@ -202,12 +202,12 @@ public class DonneeMaster implements Observable {
 	 * 
 	 * @param proposiSecret Combinaison secrète du joueur en mode défenseur.
 	 */
-	public void setProposiSecreteManDefenseur(String proposiSecret) {
-		this.proposiSecreteManDefenseur = proposiSecret;
+	public void setPropoSecreteManDefenseur(String propoSecreteManDefenseur) {
+		this.propoSecreteManDefenseur = propoSecreteManDefenseur;
 		
 		LOGGER.debug("Jeu Mastermind en mode Défenseur - Combinaison secrète joueur Modèle de données :" +
 		
-				this.proposiSecreteManDefenseur);
+				this.propoSecreteManDefenseur);
 		
 		this.initListePossibilitees();
 		
@@ -215,7 +215,7 @@ public class DonneeMaster implements Observable {
 				
 				listePossibilitees.size());
 		
-		this.proposiCpuDefenseur();
+		this.propoCpuDefenseur();
 		this.updateObserver();
 	}
 	
@@ -226,9 +226,9 @@ public class DonneeMaster implements Observable {
 	 * 
 	 * @param reponseJoueur - Réponse du joueur en mode défenseur.
 	 */
-	public void setReponseManDefenseur(String reponseMan) {
-		this.reponseManDefenseur = reponseMan;
-		this.proposiCpuDefenseur();
+	public void setReponseManDefenseur(String reponseManDefenseur) {
+		this.reponseManDefenseur = reponseManDefenseur;
+		this.propoCpuDefenseur();
 		this.updateObserver();
 	}
 	
@@ -240,12 +240,12 @@ public class DonneeMaster implements Observable {
 	 * Suivant la reponse que fera le joueur, la liste sera réduite au fur et à mesure.
 	 * Le Cpu proposera à chaque fois le premier élément de la liste.
 	 */
-	private void proposiCpuDefenseur() {
+	private void propoCpuDefenseur() {
 		if(reponseManDefenseur.equals("")) {
-			proposiCpuDefenseur = listePossibilitees.getFirst();
+			propoCpuDefenseur = listePossibilitees.getFirst();
 			LOGGER.debug("Jeu Mastermind en mode Défenseur - Proposition du Cpu en mode défenseur :"
 					
-					+ proposiCpuDefenseur);
+					+ propoCpuDefenseur);
 		}
 		
 		else {
@@ -316,7 +316,7 @@ public class DonneeMaster implements Observable {
 						+ listePossibilitees.getFirst());
 						
 				reponseManDefenseur = "";
-				proposiCpuDefenseur = listePossibilitees.getFirst();
+				propoCpuDefenseur = listePossibilitees.getFirst();
 
 
 			}
@@ -336,12 +336,12 @@ public class DonneeMaster implements Observable {
 		 * 
 		 * @param proposiSecrete - Combinaison secrète de l'ordinateur en mode duel.
 		 */
-		public void setProposiSecreteCpuDuel(String proposiSecret) {
-			this.proposiSecreteCpuDuel = proposiSecret;
+		public void setPropoSecreteCpuDuel(String propoSecreteCpuDuel) {
+			this.propoSecreteCpuDuel = propoSecreteCpuDuel;
 			
 			LOGGER.debug("Jeu Mastermind en mode Duel - Combinaison Secrète Ordinateur Modèle de données : "
 			
-					+ this.proposiSecreteCpuDuel);
+					+ this.propoSecreteCpuDuel);
 		}
 		
 		/**
@@ -349,12 +349,12 @@ public class DonneeMaster implements Observable {
 		 * 
 		 * @param proposiSecrete Combinaison secrète du joueur en mode duel.
 		 */
-		public void setPropositionSecreteManDuel(String propositionSecrete) {
-			this.proposiSecreteManDuel=propositionSecrete;
+		public void setPropoSecreteManDuel(String propoSecreteManDuel) {
+			this.propoSecreteManDuel=propoSecreteManDuel;
 			
 			LOGGER.debug("Jeu Mastermind en mode Duel - Proposition Secrète Joueur Modèle de données :"
 			
-					+ this.proposiSecreteManDuel);
+					+ this.propoSecreteManDuel);
 			
 			this.initListePossibilitees();
 			
@@ -371,15 +371,15 @@ public class DonneeMaster implements Observable {
 		 * 
 		 * @param proposiMan Proposition du joueur en mode duel.
 		 */
-		public void setProposiManDuel(String proposiJoueur) {
+		public void setPropoManDuel(String propoManDuel) {
 			int verifReponseCpuDuel = 0;
-			this.proposiManDuel = proposiJoueur;
+			this.propoManDuel = propoManDuel;
 			
 			LOGGER.debug("Jeu Mastermind en mode Duel - Proposition Joueur Modèle de données :"
 			
-					+this.proposiManDuel);
+					+this.propoManDuel);
 			
-			this.analyseProposiManDuel();
+			this.analysePropoManDuel();
 			affichage = reponseCpuDuel;
 			LOGGER.debug("Jeu Mastermind en mode Duel - Réponse Ordinateur Mode Duel :"
 			
@@ -395,8 +395,8 @@ public class DonneeMaster implements Observable {
 			}
 
 			if(verifReponseCpuDuel!=this.nbCase) {
-				this.proposiCpuDuel();
-				affichage=proposiCpuDuel;
+				this.propoCpuDuel();
+				affichage=propoCpuDuel;
 				this.updateObserver();
 
 		}
@@ -407,8 +407,8 @@ public class DonneeMaster implements Observable {
 		 * 
 		 * @param reponseJoueur Réponse du joueur en mode duel.
 		 */
-		public void setReponseManDuel(String reponseJoueur) {
-			this.reponseManDuel = reponseJoueur;
+		public void setReponseManDuel(String reponseManDuel) {
+			this.reponseManDuel = reponseManDuel;
 		}
 		
 		
@@ -416,7 +416,7 @@ public class DonneeMaster implements Observable {
 		 * Méthode relative au mode Duel qui permet d'analyser la proposition du joueur en la comparant
 		 * à la combinaison secrète de l'ordinateur.
 		 */
-		private void analyseProposiManDuel() {
+		private void analysePropoManDuel() {
 			
 		
 		//Analyse des boules bien placées (pions rouges) et mal placées (pions blancs).
@@ -424,7 +424,7 @@ public class DonneeMaster implements Observable {
 				int[] tabReponse = new int[this.nbCase];
 				char []tabAnalyse = new char[this.nbCase];
 				
-				tabAnalyse=proposiSecreteCpuDuel.toCharArray();
+				tabAnalyse=propoSecreteCpuDuel.toCharArray();
 				
 				for (int i=0;i<this.nbCase;i++) {
 					tabReponse[i]=3;
@@ -437,7 +437,7 @@ public class DonneeMaster implements Observable {
 				for (int i=0;i<this.nbCase;i++) {
 					
 				
-					if(this.proposiManDuel.charAt(i)==tabAnalyse[i]) {
+					if(this.propoManDuel.charAt(i)==tabAnalyse[i]) {
 						tabReponse[i]=1;
 						tabAnalyse[i]=' ';
 					}
@@ -447,7 +447,7 @@ public class DonneeMaster implements Observable {
 		
 		for(int j=0;j<this.nbCase;j++) {
 			
-			if(this.proposiManDuel.charAt(i)==tabAnalyse[j]&&tabReponse[i]!=1) {
+			if(this.propoManDuel.charAt(i)==tabAnalyse[j]&&tabReponse[i]!=1) {
 				tabReponse[i]=2;
 				tabAnalyse[j]=' ';
 				break;
@@ -486,14 +486,14 @@ public class DonneeMaster implements Observable {
  * L'ordinateur proposera à chaque fois le premier élément de la liste chainée.
  */
 
-public void proposiCpuDuel() {
+public void propoCpuDuel() {
 	
 	if(reponseManDuel.equals("")) {
-		proposiCpuDuel = listePossibilitees.getFirst();
+		propoCpuDuel = listePossibilitees.getFirst();
 		
 		LOGGER.debug("Jeu Mastermind en mode Duel - Proposition Ordinateur Mode Duel :"
 		
-				+ proposiCpuDuel);
+				+ propoCpuDuel);
 
 	}
 	
@@ -556,7 +556,7 @@ public void proposiCpuDuel() {
 		LOGGER.debug("Jeu Mastermind en mode Duel - Taille liste chaînée réactualisé :"+listePossibilitees.size());
 		LOGGER.debug("Jeu Mastermind en mode Duel - Premier élément réactualisé :"+listePossibilitees.getFirst());
 		reponseManDuel="";
-		proposiCpuDuel=listePossibilitees.getFirst();
+		propoCpuDuel=listePossibilitees.getFirst();
 	}
 }
 
@@ -591,8 +591,8 @@ public void setNbEssai(int nbEssai) {
  * 
  * @param nbreCases Nombre de cases.
  */
-public void setNbCase(int nbCases) {
-	this.nbCase = nbCases;
+public void setNbCase(int nbCase) {
+	this.nbCase = nbCase;
 }
 
 /**
@@ -689,7 +689,7 @@ public void updateObserver() {
 		if(modeJeu==0)
 			obs.updateMaster(reponseCpuChallenger);
 		else if(modeJeu==1)
-			obs.updateMaster(proposiCpuDefenseur);
+			obs.updateMaster(propoCpuDefenseur);
 		else
 			obs.updateMaster(affichage);
 	}
@@ -713,10 +713,10 @@ public void accueilObserver() {
 
 public void relancerPartie() {
 	for (Observer obs : listeObservateur) {
-		this.proposiSecreteCpuDuel="";
-		this.proposiSecreteManDuel="";
+		this.propoSecreteCpuDuel="";
+		this.propoSecreteManDuel="";
 		this.reponseManDuel="";
-		this.proposiCpuDuel="";
+		this.propoCpuDuel="";
 		obs.relancerPartie();
 	}
 }
