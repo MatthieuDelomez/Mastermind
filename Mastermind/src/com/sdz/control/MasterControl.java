@@ -1,6 +1,7 @@
 package com.sdz.control;
 
 import com.sdz.model.*;
+
 import com.sdz.vue.*;
 import com.sdz.control.*;
 
@@ -48,8 +49,8 @@ public class MasterControl {
 	 * 
 	 * @param propositionSecrete Combinaison secrète de l'ordinateur en mode challenger.
 	 */
-	public void setProposiSecreteCpuChallenger(String proposiSecrete) {
-		this.modelMaster.setProposiSecreteCpuChallenger(proposiSecrete);
+	public void setPropoSecreteCpuChallenger(String propoSecreteCpuChallenger) {
+		this.modelMaster.setPropoSecreteCpuChallenger(propoSecreteCpuChallenger);
 	}
 
 	/**
@@ -57,8 +58,8 @@ public class MasterControl {
 	 * 
 	 * @param propositionJoueur Proposition du joueur en mode challenger.
 	 */
-	public void setProposiManChallenger(String propositionJoueur) {
-		this.modelMaster.setProposiManChallenger(propositionJoueur);
+	public void setPropoManChallenger(String propoManChallenger) {
+		this.modelMaster.setPropoManChallenger(propoManChallenger);
 	}
 
 	
@@ -75,8 +76,8 @@ public class MasterControl {
 	 * 
 	 * @param propositionSecrete Combinaison secrète du joueur en mode défenseur.
 	 */
-	public void setProposiSecreteManDefenseur(String proposiSecrete) {
-		this.modelMaster.setProposiSecreteManDefenseur(proposiSecrete);
+	public void setPropoSecreteManDefenseur(String propoSecreteManDefenseur) {
+		this.modelMaster.setPropoSecreteManDefenseur(propoSecreteManDefenseur);
 	}
 
 	/**
@@ -84,8 +85,8 @@ public class MasterControl {
 	 * 
 	 * @param reponseJoueur Réponse du joueur en mode défenseur.
 	 */
-	public void setReponseManDefenseur(String reponseJoueur) {
-		this.modelMaster.setReponseManDefenseur(reponseJoueur);
+	public void setReponseManDefenseur(String reponseManDefenseur) {
+		this.modelMaster.setReponseManDefenseur(reponseManDefenseur);
 	}
 	
 
@@ -100,32 +101,32 @@ public class MasterControl {
 	 * Méthode relative au mode Duel qui permet de transférer la combinaison secrète de l'ordinateur au modèle.
 	 * @param propositionSecrete Combinaison secrète de l'ordinateur en mode duel.
 	 */
-	public void setProposiSecreteCpuDuel(String propositionSecrete) {
-		this.modelMaster.setProposiSecreteCpuDuel(propositionSecrete);
+	public void setPropoSecreteCpuDuel(String propoSecreteCpuDuel) {
+		this.modelMaster.setPropoSecreteCpuDuel(propoSecreteCpuDuel);
 	}
 
 	/**
 	 * Méthode relative au mode Duel qui permet de transférer la combinaison secrète du joueur au modèle.
 	 * @param propositionSecrete Combinaison secrète du joueur en mode duel.
 	 */
-	public void setProposiSecreteManDuel(String propositionSecrete) {
-		this.modelMaster.setProposiManDuel(propositionSecrete);
+	public void setPropoSecreteManDuel(String propoSecreteManDuel) {
+		this.modelMaster.setPropoManDuel(propoSecreteManDuel);
 	}
 
 	/**
 	 * Méthode relative au mode Duel qui permet de transférer la proposition du joueur au modèle.
 	 * @param propositionJoueur Proposition du joueur en mode duel.
 	 */
-	public void setProposiManDuel(String propositionJoueur) {
-		this.modelMaster.setProposiManDuel(propositionJoueur);
+	public void setPropoManDuel(String propoManDuel) {
+		this.modelMaster.setPropoManDuel(propoManDuel);
 	}
 
 	/**
 	 * Méthode relative au mode Duel qui permet de transférer la réponse du joueur au modèle.
 	 * @param reponseJoueur Réponse du joueur en mode duel.
 	 */
-	public void setReponseManDuel(String reponseJoueur) {
-		this.modelMaster.setReponseManDuel(reponseJoueur);
+	public void setReponseManDuel(String reponseManDuel) {
+		this.modelMaster.setReponseManDuel(reponseManDuel);
 	}
 
 	
