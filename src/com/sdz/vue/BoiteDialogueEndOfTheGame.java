@@ -1,16 +1,24 @@
 package com.sdz.vue;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
+import com.sdz.model.DonneeMaster;
+import com.sdz.vue.*;
+import com.sdz.model.*;
+import com.sdz.observation.*;
+
 
 
 /******************************MASTERMIND********************************/
@@ -19,168 +27,267 @@ import javax.swing.JRadioButton;
  * Classe qui s'inscrit donc dans la partie VUE du pattern MVC, boite de 
  * dialogue qui permet au joueur de relancer la partie ou retourner sur 
  * la page d'accueil.
- *
- * @author Matthieu Delomez
  * 
  *************************************************************************/
 
 
-public class BoiteDialogueEndOfTheGame extends JDialog{
+public class BoiteDialogueEndOfTheGame extends JDialog {
+	
+	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Chois possible pour le joueur en fin de Game : 
-	 *       . Relancer la partie.
-	 *       . Retourner à la page d'accueil.
-	 *       . Quitter l'application.
-	 */
-	
-	private String choixFinPartie = ""; // Initialisation
-	
-	
-	/**
-	 * JRadioButton qui est égal à un choix.
-	 */
-	private JRadioButton Rejouer = new JRadioButton("Rejouer au même jeu"),
-			
-			RetourPageAccueil = new JRadioButton("Selectionner un autre mode de jeu"),
-			
-			QuitterAppli = new JRadioButton("Quitter l'application");
-	
-	
-	/**
-	 * Button Group qui regroupe les JRadioButton.
-	 */
-	private ButtonGroup regroupeChoix = new ButtonGroup();
 
-	
-	/**
-	 * Label contenant Message informatif.
+	 * Choix du joueur en fin de partie : Le joueur a le choix entre relancer le même jeu,
+
+	 * retourner à la page d'accueil ou quitter l'application.
+
 	 */
-	private JLabel messageInfo = new JLabel("Vous avez le choix entre :");
+
+	private String choixFinPartie= "";
 	
 	
 	/**
-	 * JPanel principal de la classe contenant les composants
-	 * du message et aux choix en fin de game.
+	 * Image de la page d'accuei.
 	 */
-	private JPanel container = new JPanel();
+	private JLabel imageJeu = new JLabel(new ImageIcon("ressources/Mastermind.png"));
 	
-	
+	private Fenetre fen;
+
+
 	/**
-	 * JPanel contenant le JBUtton de validation.
+
+	 * JRadioButton correspondant à un choix.
+
 	 */
-	private JPanel jpButton = new JPanel();
-	
-	
+
+	private JRadioButton jrbChoixRejouer=new JRadioButton("Rejouer au même jeu"),
+
+			jrbRetourPageAccueil=new JRadioButton("Lancer un autre jeu    "),
+
+			jrbQuitterApplication=new JRadioButton("Quitter l'application    ");
+
+
+
 	/**
+
+	 * Button Group permettant de regrouper les JRadioButton.
+
+	 */
+
+	private ButtonGroup bgChoix=new ButtonGroup();
+
+
+
+	/**
+
+	 * JLabel de type informatif.
+
+	 */
+
+	private JLabel jlMessageInformatif = new JLabel("Vous avez le choix entre :");
+
+
+
+	/**
+
+	 * JPanel principal de la classe contenant les composants relatifs 
+
+	 * au message informatif et aux choix possibles en fin de partie.
+
+	 */
+
+	private JPanel jpContainer=new JPanel();
+
+
+
+	/**
+
+	 * JPanel contenant le JButton de validation.
+
+	 */
+
+	private JPanel jpButton=new JPanel();
+
+
+	private DonneeMaster donneeMaster;
+
+	/**
+
 	 * JButton de validation.
+
 	 */
-	private JButton boutonOk = new JButton("OK");
-	
-	
-	/* *************************************************************************************************
-	 * 
-	 ******************************************CONSTRUCTEUR*********************************************
-	 * 
-	 **************************************************************************************************/
-	
-	
-	public BoiteDialogueEndOfTheGame(JFrame parent, String title, boolean modalite) {
-		super(parent, title, modalite);
-		this.setSize(200,180);
+
+	private JButton jbOk=new JButton("OK");
+
+
+
+	/**
+
+	 * Constructeur de la classe BoiteDialogueEndOfTheGame.
+
+	 * @param parent Composant parent. Cette variable sera null.
+
+	 * @param title Titre de la boite de dialogue.
+
+	 * @param modal Modalité de la boite de dialogue. On optera pour une boite de dialogue modale.
+
+	 */
+
+	public BoiteDialogueEndOfTheGame(JFrame parent, String title, boolean modal) {
+
+		super(parent,title,modal);
+
+		this.setSize(200,200);
+
 		this.setLocationRelativeTo(null);
+
 		this.setResizable(false);
+
 		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
 		this.initComponent();
+
 		this.showDialog(true);
-		
+
 	}
-	
+
+
+
 	/**
-	 * Méthode qui permet de créer l'interface de la boite de dialogue.
+
+	 * Méthode permettant de réaliser l'interface graphique de la boite de dialogue.
+
 	 */
+
 	private void initComponent() {
-		
-		regroupeChoix.add(Rejouer);
-		regroupeChoix.add(RetourPageAccueil);
-		regroupeChoix.add(QuitterAppli);
-		
-		Rejouer.setSelected(true);
-		
-		container.add(messageInfo);
-		container.add(Rejouer);
-		container.add(RetourPageAccueil);
-		container.add(QuitterAppli);
-		jpButton.add(boutonOk);
-		
-		
-		this.getContentPane().add(container, BorderLayout.CENTER);
-		this.getContentPane().add(container, BorderLayout.SOUTH);
-		
-		
-		
-		/**
-		 * Définition des listeners.
-		 */
-		boutonOk.addActionListener(new ActionListener() {
-			String strChoix = "";
-			
+
+
+
+		bgChoix.add(jrbChoixRejouer);
+
+		bgChoix.add(jrbRetourPageAccueil);
+
+		bgChoix.add(jrbQuitterApplication);
+
+
+
+		jrbChoixRejouer.setSelected(true);
+
+
+
+		jpContainer.add(jlMessageInformatif);
+
+		jpContainer.add(jrbChoixRejouer);
+
+		jpContainer.add(jrbRetourPageAccueil);
+
+		jpContainer.add(jrbQuitterApplication);
+
+		jpButton.add(jbOk);
+
+
+
+
+
+		this.getContentPane().add(jpContainer,BorderLayout.CENTER);
+
+		this.getContentPane().add(jpButton,BorderLayout.SOUTH);
+
+
+
+		//Définition des listeners
+
+		jbOk.addActionListener(new ActionListener() {
+
+			String strChoix="";
+
 			public void actionPerformed(ActionEvent event) {
-				if(Rejouer.isSelected()) {
-					strChoix = Rejouer.getText().trim();
+
+				if(jrbChoixRejouer.isSelected()) {
+
+					strChoix=jrbChoixRejouer.getText().trim();
+
+				}
+
+				else if(jrbRetourPageAccueil.isSelected()) {
+
+					strChoix=jrbRetourPageAccueil.getText().trim();
+					
+			
 				}
 				
-				else if(RetourPageAccueil.isSelected()) {
-					strChoix = RetourPageAccueil.getText().trim();
-				}
+
+
 				
+
 				else {
-					strChoix = QuitterAppli.getText().trim();
+
+					strChoix=jrbQuitterApplication.getText().trim();
+					
+					System.exit(0);
+
+
 				}
-				
+
 				setChoixFinPartie(strChoix);
-				showDialog(false);
-			}
+
+				showDialog(false);	
+
+			}	
+
 		});
-		
+
 	}
-	
-	
+
+
+
 	/**
-	 * Rendre la boite de dialogue visible
+
+	 * Méthode permettant de rendre visible la boite de dialogue.
+
+	 * @param affichage Variable de type booléenne permettant d'indiquer
+
+	 * si la boite de dialogue doit être visible ou non.
+
 	 */
+
 	private void showDialog(boolean affichage) {
+
 		this.setVisible(affichage);
+
 	}
-	
-	
-	/* *************************************************************************************************
-	 * 
-	 ******************************************MUTATEUR*********************************************
-	 * 
-	 **************************************************************************************************/
-	
-	
+
+
+
 	/**
-	 * 	Permet de modifier le choix effectué par le joueur à la fin de la partie.
+
+	 * Mutateur permettant de modifier le choix effectué par le joueur en fin de partie.
+
+	 * @param choixFinDePartie Choix effectué par le joueur en fin de partie.
+
 	 */
+
 	public void setChoixFinPartie(String choixFinPartie) {
-		this.choixFinPartie = choixFinPartie;
+
+		this.choixFinPartie=choixFinPartie;
+
 	}
-	
-	
-	/* *************************************************************************************************
-	 * 
-	 ******************************************ACCESSEUR*********************************************
-	 * 
-	 **************************************************************************************************/
-	
-	
+
+
+
 	/**
-	 * Permet de récupérer le choix du joueur en fin de partie.
+
+	 * Accesseur permettant de récupérer le choix du joueur en fin de partie.
+
+	 * @return Le choix du joueur en fin de partie
+
 	 */
-	public String getChoixFinPartie() {
+
+	public String getChoixFinDePartie() {
+
 		return this.choixFinPartie;
+
 	}
 
 }
+

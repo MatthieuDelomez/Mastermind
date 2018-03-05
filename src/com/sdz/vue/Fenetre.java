@@ -1,10 +1,16 @@
 package com.sdz.vue;
 
 import java.awt.BorderLayout;
+
+
+
+
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,9 +27,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.sdz.model.*;
 import com.sdz.control.*;
+import com.sdz.vue.*;
 import com.sdz.observation.Observable;
 import com.sdz.observation.Observer;
 
@@ -34,39 +43,47 @@ import com.sdz.observation.Observer;
  * aux fonctionnalités du jeux. Elle implémente l'interface Observer.
  * 
  * @ author Matthieu Delomez
- * @see Observateur
+ * @see Observer
  * 
  *******************************************************************/
 
 public class Fenetre extends JFrame implements Observer {
 	
 	
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Barre du menu
 	 * Fichier = nouveau + score + quitter.
 	 * A propos = Regles + Credit.
 	 * 
 	 */
-	private JMenuBar menu = null;
+	private JMenuBar jmbmenu = new JMenuBar();
 	
-	private JMenu fichier = null;
-	private JMenu apropos = null;
-	private JMenu modeJeux = null;
-	private JMenu parametre = null;
+	/*
+	 * Element de la barre du menu
+	 */
+	private JMenu jmFichier = new JMenu("Fichier"), jmInstruction = new JMenu("Instruction"),
+			
+			jmModeJeu = new JMenu("Mode de jeu"), jmParametre = new JMenu("Paramètres");
+	
+	/*
+	 * Champ permettant d'accéder à la fonctionnalité correspondante de l'application.
+	 */
+	private JMenuItem jmiModeChallenger = new JMenuItem("Mode Challenger"),
+			
+			  effacer = new JMenuItem("Nouveau"),
 
-	private JMenuItem nouveau = null;
-	private JMenuItem score = null;
-	private JMenuItem quitter = null;
-	private JMenuItem reglage = null;
+              jmiModeDefenseur = new JMenuItem("Mode Défenseur"),
 	
-	private JMenuItem apropos2 = null;
-	private JMenuItem regle  =null;
+              jmiModeDuel = new JMenuItem("Mode Duel"),
 	
-	private JMenuItem modeChallenger = new JMenuItem("Mode Challenger"),
-			
-			modeDefenseur = new JMenuItem("Mode Défenseur"),
-			
-			modeDuel = new JMenuItem("Mode Duel");
+              jmiQuitter = new JMenuItem("Quitter"),
+	
+              jmiRegle = new JMenuItem("Régles"),
+	
+              jmiParametre = new JMenuItem("Parametrages");
 	
 	
 	private Dimension size;
@@ -74,11 +91,12 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Image de la page d'accuei.
 	 */
-	private JLabel imageJeu = new JLabel(new ImageIcon("ressources/Mastermind.jpg"));
+	private JLabel imageJeu = new JLabel(new ImageIcon("ressources/Mastermind.png"));
 	
 	
 	/**
 	 * Modèle des données correspondant au jeu Mastermind
+	 * @see DonneeMaster
 	 */
 	private DonneeMaster donneeMaster;
 	
@@ -91,18 +109,23 @@ public class Fenetre extends JFrame implements Observer {
 	
 	/**
 	 * Objet lié au jeu correspondant.
+	 * @see MasterChallenger
+	 * @see MasterDefenseur
+	 * @see MasterDuel
 	 */
-	private MasterChallenger masterChallenger;
+	private ModeChallenger modeChallenger;
 	
-	private MasterDefenseur masterDefenseur;
+	private ModeDefenseur modeDefenseur;
 	
-	private MasterDuel masterDuel;
+	private ModeDuel modeDuel;
+	
 	
 	
 	/**
 	 * Boite de dialoge permettant de changer les paramètres du jeu.
+	 * @see BoiteDialogueParametrage
 	 */
-	private BoiteDialogueParametrage parametrage;
+	private BoiteDialogueParametrage jdparametrage;
 	
 	/**
 	 * Flux d'entrée qui va permettre de lire le fichier ressources/config.properties
@@ -123,7 +146,7 @@ public class Fenetre extends JFrame implements Observer {
 	/**
 	 * Paramètre du jeu.
 	 */
-	private int nbCase = 4, nbEssai = 10, nbCouleur = 6;
+	private int nbCase = 4, nbEssai = 10, nbCouleur = 10;
 	
 	/**
 	 * Paramètre du mode développement
@@ -131,6 +154,7 @@ public class Fenetre extends JFrame implements Observer {
 	private boolean modeDeveloppeurActive = false;
 	
 	private Observable model;
+
 
 	
 	
@@ -140,8 +164,17 @@ public class Fenetre extends JFrame implements Observer {
 	 * 
 	 **************************************************************************************************/
 	
+	/**
+	 * Constructeur de la classe Fenetre.
+	 * 
+	 * @param donneeMaster
+	 * @param donneeMaster2 
+	 * @param string 
+	 * @param modeDeveloppeurActiveConsole, paramètre boolean indiquant si le mode developpeur est actif ou non.
+	 * @see DonneeMaster
+	 */
 	
-	public Fenetre(DonneeMaster donneeMaster, boolean modeDeveloppeurActiveConsole) {
+	public Fenetre(Observable donneeMaster,boolean modeDeveloppeurActiveConsole) {
 		
 		LOGGER.trace("Instanciation de la fenetre principale");
 		this.setTitle("Mastermind");
@@ -149,15 +182,15 @@ public class Fenetre extends JFrame implements Observer {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		this.setIconImage(new ImageIcon("ressoures/MastermindFormatIcon.png").getImage());
+		this.setIconImage(new ImageIcon("ressoures/Mastermind.png").getImage());
 		imageJeu.setPreferredSize(new Dimension(1000,740));
 		
 		container.setPreferredSize(new Dimension(600,637));
 		container.add(imageJeu);
-		container.setBackground(Color.white);
+		container.setBackground(Color.BLACK);
 		this.setContentPane(container);
 		
-		this.model = model;
+		this.model = donneeMaster;
 		this.model.addObserver(this);
 		this.modeDeveloppeurActive = modeDeveloppeurActiveConsole;
 		LOGGER.trace("Initialisation des modèles de données");
@@ -172,24 +205,36 @@ public class Fenetre extends JFrame implements Observer {
 			input = new FileInputStream("ressources/config.properties");
 			prop.load(input);
 			
-			nbEssai = Integer.valueOf(prop.getProperty("param.nbEssaisActifMastermind"));
-			nbCase = Integer.valueOf(prop.getProperty("param.nbCaseActifMastermind"));
-			nbCouleur = Integer.valueOf(prop.getProperty("param.nbCouleurActifMastermind"));
+			nbEssai = Integer.valueOf(prop.getProperty("param.nbEssaiActif"));
+			nbCase = Integer.valueOf(prop.getProperty("param.nbCaseActif"));
+			nbCouleur = Integer.valueOf(prop.getProperty("param.nbCouleurActif"));
 
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		finally {
+			
 			if(input!=null) {
+				
 				try {
+					
 					input.close();
+					
+					
 				} catch (IOException e) {
 					e.printStackTrace();
+					
+					
 				}	
 			}
 		}
-	
+		
+		this.initMenu();
+		this.setVisible(true);
+	}
+		
 		
 		/**
 		 * Méthode qui permet d'initialiser le menu de la fenêtre principale.	 
@@ -198,202 +243,239 @@ public class Fenetre extends JFrame implements Observer {
 			
 			LOGGER.trace("Initalisation du menu");
 			
-			menu = new JMenuBar(); 
-			fichier = new JMenu("fichier");
-			fichier.setMnemonic('f');
-			nouveau = new JMenuItem("nouveau");
+			// Définition des mnémosiques
+			jmFichier.setMnemonic('F');
+			jmInstruction.setMnemonic('I');
+			jmParametre.setMnemonic('P');
+			jmModeJeu.setMnemonic('E');
 
+			
 
+			
 			// Définition des accélérateurs
-			quitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
-			parametre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
-			
+			jmiQuitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
+		    jmiParametre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+		    effacer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,KeyEvent.CTRL_DOWN_MASK));
+		    
+		    // Construction du menu
+		  
+			jmModeJeu.add(jmiModeChallenger);
 
-			// Construction du menu
-			modeJeux.add(modeChallenger);
-			modeJeux.add(modeDefenseur);
-			modeJeux.add(modeDuel);
-			
-			fichier.add(nouveau);
-			fichier.add(score);
-			fichier.addSeparator();
-			fichier.add(quitter);
-			parametre.add(reglage);
-			
-			apropos.add(regle);		
-			apropos.add(apropos2);			
+			jmModeJeu.add(jmiModeDefenseur);
 
-			menu.add(fichier);
-			menu.add(parametre);
-			menu.add(modeJeux);
-			menu.add(apropos);
+			jmModeJeu.add(jmiModeDuel);
 
-			this.setJMenuBar(menu);
+			jmFichier.add(effacer);
+
+			jmFichier.addSeparator();
+
+			jmFichier.add(jmiQuitter);
+
+			jmParametre.add(jmiParametre);
+
+			jmInstruction.add(jmiRegle);
+
+			jmbmenu.add(jmFichier);
+
+			jmbmenu.add(jmParametre);
+
+			jmbmenu.add(jmInstruction);
 			
-		
-	
-/*
-		
-		
-		// On place une écoute sur le bouton 'nouveau'
-		nouveau.addActionListener(new ActionListener() {
+			jmbmenu.add(jmModeJeu);
+
+			this.setJMenuBar(jmbmenu);
+
+
 			
-			public void actionPerformed(ActionEvent arg0) {
+			// Définition  des listeners.
+			jmiModeChallenger.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					container.removeAll();
+			     	//container.setBackground(Color.YELLOW);
+					
+			
+					modeChallenger=new ModeChallenger(nbCase,nbEssai,
+
+							nbCouleur,modeDeveloppeurActive, new DonneeMaster());
+					
+
+					container.add(modeChallenger);
+					container.revalidate();
+					container.repaint();
+					jmParametre.setEnabled(false);
+					effacer.setEnabled(true);
+					jmParametre.setEnabled(true);
+
+			    	LOGGER.trace("On clik sur le bouton challenger");
+
+					
+					 initModel();
+				}
+			});
+			
+			jmiModeDefenseur.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					container.removeAll();
+					modeDefenseur=new ModeDefenseur(nbCase,nbEssai,nbCouleur,modeDeveloppeurActive,new DonneeMaster());
+					container.add(modeDefenseur);
+
+					container.revalidate();
+					container.repaint();
+					jmParametre.setEnabled(false);
+					effacer.setEnabled(true);
+					jmParametre.setEnabled(true);
+
+					
+					initModel();
+				}
+			});
+			
+			
+			
+			 
+		
+			 
+                  effacer.addActionListener(new ActionListener(){
+                      public void actionPerformed(ActionEvent arg0){
+                    	  
+                    	    container.removeAll();
+                    		jmParametre.setEnabled(true);
+                	    	jmParametre.removeAll();
+                	    	container.setBackground(Color.BLACK);
+                	    	container.add(imageJeu);
+                	    	container.revalidate();
+                	    	container.repaint();
+                	    	
+                	    	initModel();
+                	    	LOGGER.trace("Retour à l'accueil");
+                            
+                      }	    	
+                  });
+
+			
+			jmiModeDuel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					container.removeAll();
+					modeDuel = new ModeDuel(nbCase,nbEssai,
+
+							nbCouleur,modeDeveloppeurActive,new DonneeMaster());
+					container.add(modeDuel);
+
+					container.revalidate();
+					container.repaint();
+					jmParametre.setEnabled(false);
+					effacer.setEnabled(true);
+					jmParametre.setEnabled(true);
+
+
+
+					initModel();
+				}
+			});
+			
+			
+			jmiParametre.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					jdparametrage = new BoiteDialogueParametrage(null,"Parmètre des Jeux",true,
+							
+						nbEssai, nbCase, nbCouleur);
+					
+					nbEssai = jdparametrage.getNbrEssai();
+					nbCase = jdparametrage.getNbrCase();
+					nbCouleur = jdparametrage.getNbrCouleur();
+					modeDeveloppeurActive = jdparametrage.getModeDeveloppeurActive();
+					
+					LOGGER.debug("Menu Paramètre - Nb essais :" + nbEssai);
+					LOGGER.debug("Menu Paramètre - Nb cases :" + nbCase);
+					LOGGER.debug("Menu Paramètre - Nb couleurs :" + nbCouleur);
+					LOGGER.debug("Menu Paramètre - Etat du mode développeur  :" + modeDeveloppeurActive);
+
+				}
+			});
+			
+			
+			jmiRegle.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String instructionJeu = 
+							
+							"Le but de ce jeu est de découvrir la combinaison à 10 couleurs de l'adversaire (le défenseur)."
+									+ "\nPour ce faire, l'attaquant fait une proposition. Le défenseur indique pour chaque proposition"
+									+ "\nle nombre de couleurs de la proposition qui apparaissent à la bonne place (à l'aide de pions rouges)"
+									+ "\net à la mauvaise place (à l'aide de pions blancs) dans la combinaison secrète.Un mode duel où "
+									+ "\nattaquant et défenseur jouent tour à tour est également disponible."; 				
+					JOptionPane.showMessageDialog(null, instructionJeu, "Instructions Mastermind", JOptionPane.INFORMATION_MESSAGE);
 				
-				conteneur.removeAll();
-				Game gp = new Game(size, model);
-				model.addObserver(gp);
-				conteneur.add(gp.getPanel(), BorderLayout.CENTER);
-				conteneur.revalidate();
-				initModel();
-			}
-				
-		});
+				}
+			});
+			
+			
 		
-		// On définit maintenant le bouton 'score'
-		
-		score = new JMenuItem("Score");
-        score.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-                
-				KeyEvent.CTRL_MASK));
-        
-        
-        // On place un écouteur sur le bouton'score'
-        score.addActionListener(new ActionListener() {
-        	
-        	public void actionPerformed(ActionEvent arg0) {
-        		
-        		conteneur.removeAll();
-				conteneur.add(new ScoringPanel(size, model.getScores()).getPanel(), BorderLayout.CENTER);
-                conteneur.revalidate();
-                model.reset();
-        	}
-        });
-        
-        
-        // Definition du bouton'Quitter'
-        
-        quitter = new JMenuItem("quitter");
-        quitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
-                
-				KeyEvent.CTRL_MASK));
-        
-        quitter.addActionListener(new ActionListener() {
-        	
-        	public void actionPerformed(ActionEvent arg0) {
-        		
-        		System.exit(0); // Sortie du programme
-        	}
-        });
-        
-        
-        // Ajout des MenuiItem dans le JMenu
-        
-        fichier.add(nouveau);
-        fichier.add(score);
-        fichier.addSeparator();
-        fichier.add(quitter);
-        
-        apropos = new JMenu("A propos");
-        apropos.setMnemonic('O');
-        
-        // Ecouteur sur le bouton 'regle'
-        
-        regle = new JMenuItem("Regle du jeux");
-        regle.addActionListener(new ActionListener() {
-        	
-        	public void actionPerformed(ActionEvent arg0) {
-        		
-        		conteneur.removeAll();
-        		conteneur.add(new Regles(size).getPanel(), BorderLayout.CENTER);
-        		conteneur.revalidate();
-        		model.reset();
-        	}
-        	
-        	
-        });
-        
-		
-        // Au tour du bouton 'apropos2"
-        
-        apropos2 = new JMenuItem(" ? ");
-        apropos2.addActionListener(new ActionListener() {
-        	
-        	public void actionPerformed(ActionEvent arg0) {
-        		
-        		JOptionPane.showMessageDialog(null, 
-        				
-        				"Créateur : Delomez Matthieu\n"+
-        				"Réaliser dans le cadre du TP3 OpenClassrooms",
-        				
-        				"Crédit : ", JOptionPane.NO_OPTION);
-        		
-        	}
-        });
-        
-        
-        // Ajout des JMenuItem dans le JMenu
-        
-        apropos.add(regle);
-        apropos.add(apropos2);
-        
-        menu.add(fichier);
-        menu.add(apropos);
-        
-        
-        // Initialisation du conteneur
-        
-        this.conteneur.setPreferredSize(this.size);
-        this.conteneur.setBackground(Color.white);
-		this.conteneur.add(new PageAccueil(this.size).getPanel());
-        this.setContentPane(this.conteneur);
-        
-        this.setJMenuBar(menu);
-	}
-	
-	
-	public void showsScore(Score[] list) {
-		
-		conteneur.removeAll();
-		conteneur.add(new ScoringPanel(this.size, list).getPanel(), BorderLayout.CENTER);
-		conteneur.revalidate();
-		model.reset();
-	}
-	
-	
-   public void accueil() {
-		
-		System.out.println("Mise a jour de l'accueil");
-		conteneur.removeAll();
-		conteneur.add(new PageAccueil(size).getPanel(), BorderLayout.CENTER);
-		conteneur.revalidate();
-		model.reset();
-		
-	}
-	
-	// Initialisation du model
-	
-	private void initModel() {
-		
-		this.model = new Model();
-		this.model.addObserver(this);
-		
-	}
-	
-	
-	// Méthode Observable
-	
-	public void update(int code, int pts, int nbreCode) {}
-	
-	public void restart(int word) {}
-
-		
-	
-
-
-	*/
-	
-	
-	
+			jmiQuitter.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LOGGER.trace("Fin de l'appli");
+					System.exit(0);
+				}
+			});
+			
 		}
-}
+		
+
+		/* *************************************************************************************************
+		 * 
+		 ********************************IMPLEMENTATION DU PATTERN OBSERVER*********************************
+		 * 
+		 **************************************************************************************************/
+		
+		 /**
+		* Méthode qui permet de réinitialiser les modèles de données relatifs aux jeux..
+		*/
+		    public void initModel() {
+		    	this.model = new DonneeMaster();
+		    	this.model.addObserver(this);
+		    	LOGGER.trace("Réinitialiser des modèles de données");
+		    }
+		
+	/**
+	 * Pattern Observer - Méthode non utilisée dans la clase Fenetre.
+	 */
+		public void updateMaster(String reponse) {}
+	 
+		
+	/**
+	 * Pattern Observer - Méthode permettant de quitter l'appli.
+	*/
+	    public void quitterAppli() {
+		LOGGER.trace("Find de l'appli");
+		System.exit(0);
+	}
+	    
+	    
+		
+	/**
+    * Pattern Observer - Méthode pour revenir à la page d'accueil.
+	*/
+	    public void accueilObserver() {
+	    	jmParametre.setEnabled(true);
+	    	jmParametre.removeAll();
+	    	container.setBackground(Color.BLACK);
+	    	container.add(imageJeu);
+	    	container.revalidate();
+	    	
+	    	container.repaint();
+	    	LOGGER.trace("Retour à l'accueil");
+	    	
+	    }
+	
+		
+	/**
+	* Pattern Observer - Méthode non utilisée dans la clase Fenetre.
+    */
+	    public void relancerPartie() {}
+
+
+	}
+
+
+
+	
+	

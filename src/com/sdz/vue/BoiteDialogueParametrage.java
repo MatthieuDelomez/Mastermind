@@ -25,9 +25,8 @@ import javax.swing.JPanel;
  * Classe relative la boite de dialogue qui permet d'avoir accès aux param
  *du Mastermind tels que le nombre d'essais, le nombre de cases et le nbr
  *de couleurs utilisables pour le Mastermind.
- *
- * @author Matthieu Delomez
  * 
+ * @author Delomez Matthieu
  *************************************************************************/
 
 
@@ -141,7 +140,7 @@ public class BoiteDialogueParametrage extends JDialog {
 	private int nbCase, nbEssai, nbCouleur;
 	
 	/**
-	 * Paramètre relatif aux jeux RecherchePlusMoins et Mastermind. Par défaut, le mode développeur est désactivé.
+	 * Paramètre relatif au jeu et Mastermind. Par défaut, le mode développeur est désactivé.
 	 */
 	private boolean modeDeveloppeurActive;
 
@@ -213,24 +212,25 @@ public class BoiteDialogueParametrage extends JDialog {
 			str_nbrEssai = prop.getProperty("param.nbEssai");
 			tab_nbrEssai = str_nbrEssai.split(",");
 			
-			str_nbrCase = prop.getProperty("param.nbrCases");
+			str_nbrCase = prop.getProperty("param.nbCase");
 			tab_nbrCase = str_nbrCase.split(",");
 			
 			str_nbrCouleur = prop.getProperty("param.nbCouleur");
 			tab_nbrCouleur = str_nbrCouleur.split(",");
 		
 			
-			for(int i = 0; i < NbrCouleurFichierConfig; i++) {
+			
+			int i =0;
 				
 				nbrEssaiCombo.addItem(tab_nbrEssai[i]);
 				nbrCouleurCombo.addItem(tab_nbrCouleur[i]);
 				nbrCaseCombo.addItem(tab_nbrCase[i]);
 
-		}
+		
 			
-			nbrEssaiCombo.setSelectedItem(prop.getProperty("param.nbEssaisActif"));
-			nbrCaseCombo.setSelectedItem(prop.getProperty("param.nbreCasesActif"));
-			nbrCouleurCombo.setSelectedItem(prop.getProperty("param.nbCouleursUtilisablesActif"));
+			nbrEssaiCombo.setSelectedItem(prop.getProperty("param.nbEssaiActif"));
+			nbrCaseCombo.setSelectedItem(prop.getProperty("param.nbCaseActif"));
+			nbrCouleurCombo.setSelectedItem(prop.getProperty("param.nbCouleurActif"));
 		}
 		
 		catch (IOException e) {
@@ -286,9 +286,9 @@ public class BoiteDialogueParametrage extends JDialog {
 					nbCouleur = Integer.valueOf((String)nbrCouleurCombo.getSelectedItem());
                     nbEssai = Integer.valueOf((String)nbrEssaiCombo.getSelectedItem());
                     
-                    prop.setProperty("param.nbreCasesActif", (String)nbrCaseCombo.getSelectedItem());
-                    prop.setProperty("param.nbreEssaisActif", (String)nbrEssaiCombo.getSelectedItem());
-                    prop.setProperty("param.nbreCouleursActif", (String)nbrCouleurCombo.getSelectedItem());
+                    prop.setProperty("param.nbCaseActif", (String)nbrCaseCombo.getSelectedItem());
+                    prop.setProperty("param.nbEssaiActif", (String)nbrEssaiCombo.getSelectedItem());
+                    prop.setProperty("param.nbCouleurActif", (String)nbrCouleurCombo.getSelectedItem());
                     
                     output = new FileOutputStream("ressources/config.properties");
                     prop.store(output,  "Fichier de configuration config.properties");
